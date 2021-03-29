@@ -3,20 +3,19 @@ package main
 import "fmt"
 
 func main() {
-	var workArray [10]int
-	var n,i int
+	var workArray [10]uint8
+	var n uint8
+    var i int
 	for i=0; i<10; i++ {
 		fmt.Scan(&n)
 		workArray[i] = n
 	} 
 	
-	var a,b,c int
+	var a,b int
 	for i=1; i<4; i++ {
 		fmt.Scan(&a)
 		fmt.Scan(&b)
-		c = workArray[a]
-		workArray[a] = workArray[b]
-		workArray[b] = c
+		workArray[a],workArray[b] = workArray[b],workArray[a]
 	}
 
 	for i=0; i<10; i++ {
