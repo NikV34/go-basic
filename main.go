@@ -3,17 +3,23 @@ package main
 import "fmt"
 
 func main() {
-	var i, sq float64
-	fmt.Scan(&i)
-	sq = i * i
-	switch {
-	case i <= 0:
-		fmt.Printf("число %2.2f не подходит",i)
+	var workArray [10]int
+	var n,i int
+	for i=0; i<10; i++ {
+		fmt.Scan(&n)
+		workArray[i] = n
+	} 
 	
-	case sq > 10000:
-		fmt.Printf("%e",i)
-
-	default:
-		fmt.Printf("%4f", sq)	
+	var a,b,c int
+	for i=1; i<4; i++ {
+		fmt.Scan(&a)
+		fmt.Scan(&b)
+		c = workArray[a]
+		workArray[a] = workArray[b]
+		workArray[b] = c
 	}
+
+	for i=0; i<10; i++ {
+		fmt.Print(workArray[i]," ")
+	}  
 }
