@@ -10,9 +10,7 @@ func main()  {
 		array = append(array,N%10)
 		N=N/10
 	}
-	var counter = 0
 	for _,value := range array {
-		counter = counter + value
+		fmt.Print(value)
 	}
-	fmt.Print(counter)
 }
