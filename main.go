@@ -3,17 +3,16 @@ package main
 import "fmt"
 
 func main()  {
-	array := [5]int{}
-	var a int
-	for i:=0; i < 5; i++{
+	array := []int{}
+	var N, a int
+	fmt.Scan(&N)
+	for i:=0; i < N; i++{
 		fmt.Scan(&a)
-		array[i] = a
+		if i%2==0 {
+			array = append(array, a)
+		}
 	}
-    max := array[0]
-    for _,value := range array {
-        if value > max {
-            max = value
-        }
-    }
-    fmt.Print(max)
+	for _,value := range array {
+		fmt.Print(value)
+	}
 }
