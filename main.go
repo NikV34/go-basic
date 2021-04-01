@@ -3,16 +3,16 @@ package main
 import "fmt"
 
 func main()  {
-	var N, a int
-	var counter = 0
+	var N int
 	fmt.Scan(&N)
 	array := []int{}
-	for i:=0; i < N; i++{
-		fmt.Scan(&a)
-		array = append(array,a)
-		if array[i] > 0 {
-			counter++
-		}
+	for ; N > 0; {
+		array = append(array,N%10)
+		N=N/10
+	}
+	var counter = 0
+	for _,value := range array {
+		counter = counter + value
 	}
 	fmt.Print(counter)
 }
