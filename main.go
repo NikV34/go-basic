@@ -2,14 +2,18 @@ package main
 
 import "fmt"
 
-func main() {
-	var N int
-	fmt.Scan(&N)
-	var arr []int
-	for i:=0;i<=N-1;i++ {
-		var n int
-		fmt.Scan(&n)
-		arr = append(arr, n)
+func main()  {
+	array := [5]int{}
+	var a int
+	for i:=0; i < 5; i++{
+		fmt.Scan(&a)
+		array[i] = a
 	}
-	fmt.Print(arr[3])
+    max := array[0]
+    for _,value := range array {
+        if value > max {
+            max = value
+        }
+    }
+    fmt.Print(max)
 }
