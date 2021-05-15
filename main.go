@@ -1,24 +1,39 @@
 package main
 
 import (
-	"github.com/gin-contrib/static"
-	"github.com/gin-gonic/gin"
-	"gopkg.in/olahol/melody.v1"
+	"chat/api"
+	"chat/user"
+	"fmt"
+	"log"
+	"net/http"
+	"os"
+
+	"github.com/go-redis/redis/v7"
+	"github.com/gorilla/mux"
 )
 
+var rdb *redis.Client
+
+func init() {
+	rdb := redis.NewClient(&redis.Options{Addr: "localhost:6379"})
+	defer rdb.Close()
+	rdb.SAdd(user.ChannelsKey, "general", "random")
+}
+
 func main() {
-	r := gin.Default()
-	m := melody.New()
 
-	r.Use(static.Serve("/", static.LocalFile("./public", true)))
+	rdb = redis.NewClient(&redis.Options{Addr: "localhost:6379"})
 
-	r.GET("/ws", func(c *gin.Context) {
-		m.HandleRequest(c.Writer, c.Request)
-	})
+	r := mux.NewRouter()
 
-	m.HandleMessage(func(s *melody.Session, msg []byte) {
-		m.Broadcast(msg)
-	})
+	r.Path("/chat").Methods("GET").HandlerFunc(api.H(rdb, api.ChatWebSocketHandler))
+	r.Path("/user/{user}/channels").Methods("GET").HandlerFunc(api.H(rdb, api.UserChannelsHandler))
+	r.Path("/users").Methods("GET").HandlerFunc(api.H(rdb, api.UsersHandler))
 
-	r.Run(":5000")
+	port := ":" + os.Getenv("PORT")
+	if port == ":" {
+		port = ":8080"
+	}
+	fmt.Println("chat service started on port", port)
+	log.Fatal(http.ListenAndServe(port, r))
 }
