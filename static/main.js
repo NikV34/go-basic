@@ -1,24 +1,41 @@
 const input = document.querySelector('#textarea')
 const messages = document.querySelector('#messages')
 const username = document.querySelector('#username')
+const enter = document.querySelector('#enter-name')
 const send = document.querySelector('#send')
 
-const url = "ws://" + window.location.host + "/ws";
-const ws = new WebSocket(url);
+let socket;
+// let socket = new WebSocket("ws://localhost:8080/chat?username=wael");
+// socket.onmessage = function(event) {
+//   console.log(`[message] Data received from server: ${event.data}`);
+// };
 
-ws.onmessage = function (msg) {
-  insertMessage(JSON.parse(msg.data))
-};
+enter.addEventListener("click", () => {
+  username.value
+  socket = new WebSocket(`ws://localhost:8080/chat?username=${username}`);
+  socket.onclose = () => {
+    socket.close()
+  };
+  username.disabled = true
+  enter.disabled = true
 
-send.onclick = () => {
-  const message = {
-    username: username.value,
-    content: input.value,
-  }
+  socket.onmessage = function (msg) {
+    insertMessage(JSON.parse(msg.data))
+  };
 
-  ws.send(JSON.stringify(message));
-  input.value = "";
-};
+  send.onclick = () => {
+    const message = {
+      "command": 2,
+      "channel": "general",
+      "content": input.value,
+      "username": username.value,
+    }
+
+    socket.send(JSON.stringify(message));
+    input.value = "";
+  };
+
+})
 
 /**
  * Insert a message into the UI
@@ -27,11 +44,11 @@ send.onclick = () => {
 function insertMessage(messageObj) {
   // Create a div object which will hold the message
   const message = document.createElement('div')
+  messageObj.content.split("--")
 
   // Set the attribute of the message div
   message.setAttribute('class', 'chat-message')
-  console.log("name: " + messageObj.username + " content: " + messageObj.content)
-  message.textContent = `${messageObj.username}: ${messageObj.content}`
+  message.textContent = `${messageObj.content.split("--")[0]}: ${messageObj.content.split("--")[1]}`
 
   // Append the message to our chat div
   messages.appendChild(message)

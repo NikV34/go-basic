@@ -3,6 +3,7 @@ package user
 import (
 	"errors"
 	"fmt"
+	"strings"
 
 	"github.com/go-redis/redis/v7"
 )
@@ -154,8 +155,9 @@ func (u *User) Disconnect() error {
 	return nil
 }
 
-func Chat(rdb *redis.Client, channel string, content string) error {
-	return rdb.Publish(channel, content).Err()
+func Chat(rdb *redis.Client, channel string, content string, username string) error {
+	s := []string{username, content};
+	return rdb.Publish(channel, strings.Join(s, "--")).Err()
 }
 
 func List(rdb *redis.Client) ([]string, error) {
