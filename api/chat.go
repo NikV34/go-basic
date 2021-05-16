@@ -20,6 +20,7 @@ func H(rdb *redis.Client, fn func(http.ResponseWriter, *http.Request, *redis.Cli
 }
 
 type msg struct {
+	Username string `json:"username,omitempty"` 
 	Content string `json:"content,omitempty"`
 	Channel string `json:"channel,omitempty"`
 	Command int    `json:"command,omitempty"`
@@ -116,7 +117,7 @@ func onUserMessage(conn *websocket.Conn, r *http.Request, rdb *redis.Client) {
 			handleWSError(err, conn)
 		}
 	case commandChat:
-		if err := user.Chat(rdb, msg.Channel, msg.Content); err != nil {
+		if err := user.Chat(rdb, msg.Channel, msg.Content, msg.Username); err != nil {
 			handleWSError(err, conn)
 		}
 	}
