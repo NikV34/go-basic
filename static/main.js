@@ -5,19 +5,18 @@ const enter = document.querySelector('#enter-name')
 const send = document.querySelector('#send')
 
 let socket;
-// let socket = new WebSocket("ws://localhost:8080/chat?username=wael");
-// socket.onmessage = function(event) {
-//   console.log(`[message] Data received from server: ${event.data}`);
-// };
 
 enter.addEventListener("click", () => {
   username.value
-  socket = new WebSocket(`ws://localhost:8080/chat?username=${username}`);
+  // socket = new WebSocket(`ws://localhost:8080/chat?username=${username}`);
+  socket = new WebSocket(`wss://floating-brushlands-15189.herokuapp.com/chat?username=${username}`);
   socket.onclose = () => {
     socket.close()
   };
   username.disabled = true
   enter.disabled = true
+  send.disabled = false
+  input.disabled = false
 
   socket.onmessage = function (msg) {
     insertMessage(JSON.parse(msg.data))
