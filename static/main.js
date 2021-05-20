@@ -8,8 +8,8 @@ let socket;
 
 enter.addEventListener("click", () => {
   username.value
-  // socket = new WebSocket(`ws://localhost:8080/chat?username=${username}`);
-  socket = new WebSocket(`wss://floating-brushlands-15189.herokuapp.com/chat?username=${username}`);
+  socket = new WebSocket(`ws://localhost:8080/chat?username=${username.value}`);
+  // socket = new WebSocket(`wss://floating-brushlands-15189.herokuapp.com/chat?username=${username.value}`);
   socket.onclose = () => {
     socket.close()
   };
@@ -43,7 +43,6 @@ enter.addEventListener("click", () => {
 function insertMessage(messageObj) {
   // Create a div object which will hold the message
   const message = document.createElement('div')
-  messageObj.content.split("--")
 
   // Set the attribute of the message div
   message.setAttribute('class', 'chat-message')
